@@ -41,12 +41,15 @@ function next(job) {
   job.current.on('exit', function (code, signal) {
     job.lastExit = code || signal || 0;
     job.current  = null;
-    job.settled.push({
+
+    var info = {
       code   : code,
       signal : signal
-    });
+    };
 
-    job.emitter.emit('exit', task);
+    job.settled.push(info);
+
+    job.emitter.emit('exit', info);
 
     var hasNext = (job.pending.length > 0) && job.running;
     if (hasNext) next(job);
@@ -57,7 +60,7 @@ function next(job) {
 }
 
 Job.prototype.queue = function (task) {
-  
+
   this.pending.push(task);
 
   next(this);
@@ -65,7 +68,7 @@ Job.prototype.queue = function (task) {
 
 Job.prototype.abort = function () {
   this.running = false;
-  this.current.kill();
+  this.current.kill('SIGKILL');
 };
 
 Job.New = function () {

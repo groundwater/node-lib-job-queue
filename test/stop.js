@@ -25,7 +25,7 @@ test(function (t) {
     job.abort();
   });
   info.on('exit', function (task) {
-    t.equal(task.exec, process.argv[0]);
+    t.ok(task);
   });
   info.on('end', function () {
     t.ok(true, 'should exit');
