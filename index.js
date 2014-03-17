@@ -36,7 +36,7 @@ function next(job) {
     else         job.emitter.emit('end');
   });
 
-  job.emitter.emit('task', task);
+  job.emitter.emit('task', job.current);
 }
 
 Job.prototype.queue = function (task) {
