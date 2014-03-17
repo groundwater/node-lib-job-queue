@@ -18,19 +18,26 @@ var job = Job.New();
 
 job.queue({
   exec: 'ps',
-  args: ['aux']
+  args: ['aux'],
+  envs: process.env
 });
+
 job.queue({
   exec: 'ps',
-  args: ['-ef']
+  args: ['-ef'],
+  envs: process.env
 })
 
-job.emitter.on('task', function () {
+job.emitter.on('task', function (proc) {
   console.log('task started');
+  proc.stdout.pipe(process.stdout);
+  proc.stderr.pipe(process.stderr);
 });
+
 job.emitter.on('exit', function () {
   console.log('task exited');
 });
+
 job.emitter.on('end', function () {
   console.log('job exited');
 });
@@ -41,9 +48,18 @@ Abort a job, killing the in-process task and ending the sequence.
 ```javascript
 job.queue({
   exec: 'node',
-  args: ['-e', 'setTimeout(function(){}, 100000)']
+  args: ['-e', 'setTimeout(function(){}, 100000)'],
+  envs: process.env
 });
+
+job.queue({
+  exec: 'node',
+  args: ['-e', 'setTimeout(function(){}, 100000)'],
+  envs: process.env
+});
+
 job.emitter.on('task', function() {
+  // this aborts immediately
   job.abort();
 });
 ```
