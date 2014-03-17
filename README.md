@@ -1,5 +1,8 @@
 # job queue
 
+[![Build Status](https://travis-ci.org/groundwater/node-lib-job-queue.png?branch=master)](https://travis-ci.org/groundwater/node-lib-job-queue)
+[![NPM version](https://badge.fury.io/js/lib-job-queue.png)](http://badge.fury.io/js/lib-job-queue)
+
 ## install
 
 ```bash
