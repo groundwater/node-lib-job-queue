@@ -15,10 +15,10 @@ test(function (t) {
   var job = Job.New();
 
   job.emitter.on('task', function (proc) {
-    job.abort('SIGTERM');
+    job.abort('SIGQUIT');
   });
   job.emitter.on('exit', function (info) {
-    t.equal(info.signal, 'SIGTERM');
+    t.equal(info.signal, 'SIGQUIT');
   });
 
   while( tasks.length > 0) job.queue(tasks.shift());
