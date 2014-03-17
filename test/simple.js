@@ -8,10 +8,12 @@ test(function (t) {
 
   var tasks = [{
     exec: process.argv[0],
-    args: ['-v']
+    args: ['-v'],
+    envs: process.env
   },{
     exec: process.argv[0],
-    args: ['-v']
+    args: ['-v'],
+    envs: process.env
   }];
 
   var info = new events.EventEmitter();

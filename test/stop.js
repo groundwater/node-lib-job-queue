@@ -8,10 +8,12 @@ test(function (t) {
 
   var tasks = [{
     exec: process.argv[0],
-    args: ['-e', 'setTimeout(function(){}, 100)']
+    args: ['-e', 'setTimeout(function(){}, 100)'],
+    envs: process.env
   },{
     exec: 'FAIL',
-    args: ['-v']
+    args: ['-v'],
+    envs: process.env
   }];
 
   var info = new events.EventEmitter();

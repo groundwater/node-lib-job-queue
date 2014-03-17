@@ -29,7 +29,7 @@ function next(job) {
   var task = job.pending.shift();
   var exec = task.exec;
   var args = task.args;
-  var envs = task.envs || process.env;
+  var envs = task.envs;
   var opts = {
     stdio: 'pipe',
     env  : clone(envs)
@@ -57,6 +57,7 @@ function next(job) {
 }
 
 Job.prototype.queue = function (task) {
+  
   this.pending.push(task);
 
   next(this);

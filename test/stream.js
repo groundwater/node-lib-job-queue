@@ -9,7 +9,8 @@ test(function (t) {
 
   var tasks = [{
     exec: process.argv[0],
-    args: ['-e', 'console.log("hello world")']
+    args: ['-e', 'console.log("hello world")'],
+    envs: process.env
   }];
 
   var job  = Job.New();
