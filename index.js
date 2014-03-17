@@ -66,9 +66,11 @@ Job.prototype.queue = function (task) {
   next(this);
 };
 
-Job.prototype.abort = function () {
+Job.prototype.abort = function (signal) {
+  var method = signal || 'SIGKILL';
+
   this.running = false;
-  this.current.kill('SIGKILL');
+  this.current.kill(method);
 };
 
 Job.New = function () {
