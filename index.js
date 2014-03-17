@@ -7,6 +7,18 @@ function Job(require) {
   this.settled = [];
 
   this.running = true;
+
+  this.lastExit;
+}
+
+function clone(obj) {
+  var out = {};
+
+  Object.keys(obj).forEach(function(key) {
+    out[key] = obj[key];
+  })
+
+  return out;
 }
 
 function next(job) {
@@ -17,13 +29,18 @@ function next(job) {
   var task = job.pending.shift();
   var exec = task.exec;
   var args = task.args;
+  var envs = task.envs || process.env;
   var opts = {
-    stdio: 'pipe'
+    stdio: 'pipe',
+    env  : clone(envs)
   };
+
+  opts.env._LAST_EXIT = job.lastExit || null;
 
   job.current = job.require.Spawn(exec, args, opts);
   job.current.on('exit', function (code, signal) {
-    job.current = null;
+    job.lastExit = code || signal || 0;
+    job.current  = null;
     job.settled.push({
       code   : code,
       signal : signal
