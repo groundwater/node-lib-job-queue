@@ -10,5 +10,17 @@
   "license": "MIT",
   "devDependencies": {
     "tap": "^0.4.8"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/groundwater/node-lib-job-queue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/groundwater/node-lib-job-queue/issues"
+  },
+  "homepage": "https://github.com/groundwater/node-lib-job-queue"
 }
