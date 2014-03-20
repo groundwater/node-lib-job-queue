@@ -35,7 +35,7 @@ function next(job) {
     env  : clone(envs)
   };
 
-  opts.env._LAST_EXIT = job.lastExit || null;
+  opts.env._LAST_EXIT = job.lastExit;
 
   job.current = job.require.Spawn(exec, args, opts);
   job.current.on('exit', function (code, signal) {
