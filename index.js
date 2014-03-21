@@ -1,3 +1,9 @@
+/*
+
+  Main Class
+
+*/
+
 function Job(require) {
   this.require = require;
   this.emitter = null;
@@ -11,10 +17,39 @@ function Job(require) {
   this.lastExit= null;
 }
 
+
+/*
+
+  Methods
+
+*/
+
+Job.prototype.queue = function jobQueue(task) {
+  this.pending.push(task);
+
+  next(this);
+};
+
+Job.prototype.abort = function jobAbort(signal) {
+  var method  = signal || 'SIGKILL';
+
+  this.running = false;
+  if (this.current) this.current.kill(method)
+
+  this.emitter.emit('abort');
+};
+
+
+/*
+
+  Private Methods
+
+*/
+
 function clone(obj) {
   var out = {};
 
-  Object.keys(obj).forEach(function(key) {
+  Object.keys(obj).forEach(function cloneEachKey(key) {
     out[key] = obj[key];
   })
 
@@ -38,19 +73,23 @@ function next(job) {
   opts.env._LAST_EXIT = job.lastExit;
 
   job.current = job.require.Spawn(exec, args, opts);
-  job.current.on('exit', function (code, signal) {
+  job.current.on('exit', function jobOnExit(code, signal) {
     job.lastExit = code || signal || 0;
     job.current  = null;
 
+    // create exit stanza
     var info = {
       code   : code,
       signal : signal
     };
 
+    // exit stanza needs to be in the results pile
+    // before we emit an exit event
     job.results.push(info);
 
     job.emitter.emit('exit', info);
 
+    // stop if there are no more tasks in the queue
     var hasNext = (job.pending.length > 0) && job.running;
     if (hasNext) next(job);
     else         job.emitter.emit('end');
@@ -59,35 +98,30 @@ function next(job) {
   job.emitter.emit('task', job.current);
 }
 
-Job.prototype.queue = function (task) {
-  this.pending.push(task);
 
-  next(this);
-};
+/*
 
-Job.prototype.abort = function (signal) {
-  var method = signal || 'SIGKILL';
+  Constructors
 
-  this.running = false;
-  this.current.kill(method);
-};
+*/
 
-Job.New = function () {
+Job.New = function JobNew() {
   var emitter = new this.Emitter();
   return this.NewWithEmitter(emitter);
 }
 
-Job.NewEmpty = function () {
+Job.NewEmpty = function JobNewEmpty() {
   return new Job(this);
 }
 
-Job.NewWithEmitter = function (emitter) {
+Job.NewWithEmitter = function JobNewWithEmitter(emitter) {
   var job = this.NewEmpty();
 
   job.emitter = emitter;
 
   return job;
 }
+
 
 /*
 
@@ -110,6 +144,7 @@ function defaults() {
   };
   return inject(deps);
 }
+
 
 /*
 
