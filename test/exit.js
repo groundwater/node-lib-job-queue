@@ -65,3 +65,11 @@ test(function (t) {
 
   while( tasks.length > 0) job.queue(tasks.shift());
 });
+
+test("last exit should be null before running a job", function (t) {
+  t.plan(1);
+
+  var job = Job.New();
+
+  t.strictEqual(job.lastExit, null);
+});

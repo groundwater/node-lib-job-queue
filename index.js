@@ -8,7 +8,7 @@ function Job(require) {
 
   this.running = true;
 
-  this.lastExit;
+  this.lastExit= null;
 }
 
 function clone(obj) {
