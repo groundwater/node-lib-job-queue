@@ -4,7 +4,7 @@ function Job(require) {
 
   this.pending = [];
   this.current = null;
-  this.settled = [];
+  this.results = [];
 
   this.running = true;
 
@@ -47,7 +47,7 @@ function next(job) {
       signal : signal
     };
 
-    job.settled.push(info);
+    job.results.push(info);
 
     job.emitter.emit('exit', info);
 
@@ -60,7 +60,6 @@ function next(job) {
 }
 
 Job.prototype.queue = function (task) {
-
   this.pending.push(task);
 
   next(this);
