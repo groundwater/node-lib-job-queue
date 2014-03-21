@@ -31,16 +31,22 @@ job.queue({
   envs: process.env
 })
 
+// A task event occurs every time a new process starts.
+// The process object started is emitted.
 job.emitter.on('task', function (proc) {
   console.log('task started');
   proc.stdout.pipe(process.stdout);
   proc.stderr.pipe(process.stderr);
 });
 
-job.emitter.on('exit', function () {
-  console.log('task exited');
+// An exit event occurs every time a child process exists.
+// The exit status of the process is emitted.
+job.emitter.on('exit', function (status) {
+  console.log('task exited with code', status.code);
 });
 
+// An end event occurs when the last item in the queue exists.
+// If you queue a task *after* an end event, you will have another end event.
 job.emitter.on('end', function () {
   console.log('job exited');
 });
@@ -66,3 +72,8 @@ job.emitter.on('task', function() {
   job.abort();
 });
 ```
+
+Calling `abort` irrevocably kills your job, and all tasks associated with it.
+The default kill signal is `SIGKILL` because catchable signals are non-deterministic.
+
+You can specify another signal to `abort()` if you like.
