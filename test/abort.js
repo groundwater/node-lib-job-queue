@@ -37,12 +37,76 @@ test("abort with SIGKILL", function (t) {
   var job = Job.New();
 
   job.emitter.on('task', function (proc) {
-    job.abort('SIGKILL');
+    job.abort();
   });
   job.emitter.on('exit', function (info) {
     t.strictEqual(info.code, null);
     t.equal(info.signal, 'SIGKILL');
   });
+
+  while( tasks.length > 0) job.queue(tasks.shift());
+});
+
+test("calling abort after end", function (t) {
+  t.plan(1);
+
+  var tasks = [{
+    exec: process.argv[0],
+    args: ['-v'],
+    envs: process.env
+  }];
+
+  var job = Job.New();
+
+  job.emitter.on('end', function (info) {
+    job.abort();
+  });
+
+  job.emitter.on('abort', function () {
+    t.ok(true, 'should emit an abort event');
+  });
+
+  while( tasks.length > 0) job.queue(tasks.shift());
+});
+
+test("calling abort after task event", function (t) {
+  t.plan(1);
+
+  var tasks = [{
+    exec: process.argv[0],
+    args: ['-v'],
+    envs: process.env
+  }];
+
+  var job = Job.New();
+
+  job.emitter.on('task', function () {
+    job.abort();
+  });
+
+  job.emitter.on('abort', function () {
+    t.ok(true, 'should emit an abort event');
+  });
+
+  while( tasks.length > 0) job.queue(tasks.shift());
+});
+
+test("calling abort immediately", function (t) {
+  t.plan(1);
+
+  var tasks = [{
+    exec: process.argv[0],
+    args: ['-v'],
+    envs: process.env
+  }];
+
+  var job = Job.New();
+
+  job.emitter.on('abort', function () {
+    t.ok(true, 'should emit an abort event');
+  });
+
+  job.abort();
 
   while( tasks.length > 0) job.queue(tasks.shift());
 });
