@@ -77,3 +77,24 @@ Calling `abort` irrevocably kills your job, and all tasks associated with it.
 The default kill signal is `SIGKILL` because catchable signals are non-deterministic.
 
 You can specify another signal to `abort()` if you like.
+
+## job properties
+
+```javascript
+job.current  // the child process object
+job.running  // the job has been halted or not
+job.lastExit // exit status of the last process
+job.pending  // any scheduled jobs
+job.results  // results of completed jobs
+```
+
+### results
+
+Currently a job result only contains the exist status of the process
+
+```javascript
+{
+  code   : 0,
+  signal : null
+}
+```

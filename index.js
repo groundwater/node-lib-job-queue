@@ -27,7 +27,7 @@ function Job(require) {
 Job.prototype.queue = function jobQueue(task) {
   this.pending.push(task);
 
-  process.nextTick(next.bind(this));
+  next.call(this);
 };
 
 Job.prototype.abort = function jobAbort(signal) {
@@ -96,7 +96,7 @@ function next() {
 
     // stop if there are no more tasks in the queue
     var hasNext = (job.pending.length > 0) && job.running;
-    if (hasNext) next(job);
+    if (hasNext) next.call(job);
     else         job.emitter.emit('end');
   });
 
