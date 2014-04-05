@@ -27,7 +27,7 @@ function Job(require) {
 Job.prototype.queue = function jobQueue(task) {
   this.pending.push(task);
 
-  next(this);
+  process.nextTick(next.bind(this));
 };
 
 Job.prototype.abort = function jobAbort(signal) {
@@ -56,7 +56,9 @@ function clone(obj) {
   return out;
 }
 
-function next(job) {
+function next() {
+  var job = this;
+
   if (job.pending.length == 0) return;
   if (!job.running)            return;
   if (job.current)             return;
@@ -69,7 +71,8 @@ function next(job) {
   var envs = task.envs;
   var opts = {
     stdio: 'pipe',
-    env  : clone(envs)
+    env  : clone(envs),
+    cwd  : task.cwd,
   };
 
   opts.env._LAST_EXIT = job.lastExit;
@@ -136,7 +139,7 @@ function inject(deps) {
 }
 
 function defaults() {
-  var deps = {
+  return {
     Spawn: {
       value: require('child_process').spawn
     },
@@ -147,7 +150,6 @@ function defaults() {
       value: require('lib-proto-job')
     }
   };
-  return inject(deps);
 }
 
 
@@ -158,7 +160,5 @@ function defaults() {
 */
 
 module.exports = function INIT(deps) {
-  if (typeof deps === 'object') return inject(deps);
-  else if (deps === undefined)  return defaults();
-  else                          throw new Error('injection error');
+  return inject(deps || defaults())
 };
