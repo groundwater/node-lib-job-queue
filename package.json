@@ -15,7 +15,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lib-proto-job": "0.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/groundwater/node-lib-job-queue.git"

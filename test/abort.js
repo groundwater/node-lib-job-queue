@@ -9,7 +9,8 @@ test("abort with SIGQUIT", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'setTimeout(function(){}, 1000)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job = Job.New();
@@ -31,7 +32,8 @@ test("abort with SIGKILL", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'setTimeout(function(){}, 1000)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job = Job.New();
@@ -53,7 +55,8 @@ test("calling abort after end", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-v'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job = Job.New();
@@ -75,7 +78,8 @@ test("calling abort after task event", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-v'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job = Job.New();
@@ -97,7 +101,8 @@ test("calling abort immediately", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-v'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job = Job.New();

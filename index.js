@@ -61,7 +61,9 @@ function next(job) {
   if (!job.running)            return;
   if (job.current)             return;
 
-  var task = job.pending.shift();
+  var taskType = job.require.JobTypes.task;
+
+  var task = taskType.marshal(job.pending.shift());
   var exec = task.exec;
   var args = task.args;
   var envs = task.envs;
@@ -140,6 +142,9 @@ function defaults() {
     },
     Emitter: {
       value: require('events').EventEmitter
+    },
+    JobTypes: {
+      value: require('lib-proto-job')
     }
   };
   return inject(deps);

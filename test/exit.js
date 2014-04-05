@@ -10,11 +10,13 @@ test(function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'process.exit(1)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   },{
     exec: process.argv[0],
     args: ['-e', 'console.exit(2)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job  = Job.New();
@@ -32,7 +34,8 @@ test(function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'setTimeout(function(){}, 1000)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job  = Job.New();
@@ -52,7 +55,8 @@ test(function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'setTimeout(function(){}, 1000)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job  = Job.New();

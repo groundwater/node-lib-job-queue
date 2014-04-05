@@ -10,11 +10,13 @@ test("exit status should propagate when non-zero", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'process.exit(1)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   },{
     exec: process.argv[0],
     args: ['-e', 'console.log("EXIT:", process.env._LAST_EXIT)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job  = Job.New();
@@ -38,11 +40,13 @@ test("exit status should propagate when zero", function (t) {
   var tasks = [{
     exec: process.argv[0],
     args: ['-e', 'process.exit(0)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   },{
     exec: process.argv[0],
     args: ['-e', 'console.log("EXIT:", process.env._LAST_EXIT)'],
-    envs: process.env
+    envs: process.env,
+    cwd: process.cwd(),
   }];
 
   var job  = Job.New();
