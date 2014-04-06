@@ -25,9 +25,14 @@ function Job(require) {
 */
 
 Job.prototype.queue = function jobQueue(task) {
-  this.pending.push(task);
+  var taskType = this.require.JobTypes.task;
+  this.pending.push(taskType.marshal(task));
 
-  next.call(this);
+  // move this to nextTick because the 'emit task' in
+  // next() should probably be called asynchronously
+  //
+  // TODO: i don't have a test around this
+  process.nextTick(next.bind(this));
 };
 
 Job.prototype.abort = function jobAbort(signal) {
@@ -63,9 +68,7 @@ function next() {
   if (!job.running)            return;
   if (job.current)             return;
 
-  var taskType = job.require.JobTypes.task;
-
-  var task = taskType.marshal(job.pending.shift());
+  var task = job.pending.shift();
   var exec = task.exec;
   var args = task.args;
   var envs = task.envs;
