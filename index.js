@@ -103,6 +103,25 @@ function next() {
     else         job.emitter.emit('end');
   });
 
+  var std, path, stdin, stdout, stderr;
+
+  std = task.stdio;
+
+  if (std && (stdin = std[0]) && (path = stdin.path)) {
+    var readStr = job.require.read(path);
+    readStr.pipe(job.current.stdin);
+  }
+
+  if (std && (stdout = std[1]) && (path = stdout.path)) {
+    var writeStr = job.require.write(path);
+    job.current.stdout.pipe(writeStr);
+  }
+
+  if (std && (stderr = std[2]) && (path = stderr.path)) {
+    var writeStr = job.require.write(path);
+    job.current.stderr.pipe(writeStr);
+  }
+
   job.emitter.emit('task', job.current);
 }
 
@@ -151,6 +170,12 @@ function defaults() {
     },
     JobTypes: {
       value: require('lib-proto-job')
+    },
+    read: {
+      value: require('fs').createReadStream
+    },
+    write: {
+      value: require('fs').createWriteStream
     }
   };
 }

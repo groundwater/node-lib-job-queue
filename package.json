@@ -10,13 +10,15 @@
   "license": "MIT",
   "devDependencies": {
     "tap": "^0.4.8",
-    "concat-stream": "^1.4.4"
+    "concat-stream": "^1.4.4",
+    "lib-stream-solidify": "0.0.1",
+    "lib-stream-liquify": "0.0.1"
   },
   "directories": {
     "test": "test"
   },
   "dependencies": {
-    "lib-proto-job": "0.0.0"
+    "lib-proto-job": "^0.1.0"
   },
   "repository": {
     "type": "git",
