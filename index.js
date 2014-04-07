@@ -61,6 +61,41 @@ function clone(obj) {
   return out;
 }
 
+function makeProc(task, lastExit) {
+  var spawn = this.require.Spawn;
+  var exec = task.exec;
+  var args = task.args;
+  var envs = task.envs;
+  var stds = task.stdio;
+  var opts = {
+    stdio: 'pipe',
+    env  : clone(envs),
+    cwd  : task.cwd,
+  };
+
+  opts.env._LAST_EXIT = lastExit;
+
+  var proc = spawn(exec, args, opts);
+
+  var stdio, path;
+  if (stds && (stdio = stds[0]) && (path = stdio.path)) {
+    var readStr = this.require.read(path);
+    readStr.pipe(proc.stdin);
+  }
+
+  if (stds && (stdio = stds[1]) && (path = stdio.path)) {
+    var writeStr = this.require.write(path);
+    proc.stdout.pipe(writeStr);
+  }
+
+  if (stds && (stdio = stds[2]) && (path = stdio.path)) {
+    var writeStr = this.require.write(path);
+    proc.stderr.pipe(writeStr);
+  }
+
+  return proc;
+}
+
 function next() {
   var job = this;
 
@@ -69,18 +104,8 @@ function next() {
   if (job.current)             return;
 
   var task = job.pending.shift();
-  var exec = task.exec;
-  var args = task.args;
-  var envs = task.envs;
-  var opts = {
-    stdio: 'pipe',
-    env  : clone(envs),
-    cwd  : task.cwd,
-  };
 
-  opts.env._LAST_EXIT = job.lastExit;
-
-  job.current = job.require.Spawn(exec, args, opts);
+  job.current = makeProc.call(job, task, job.lastExit);
   job.current.on('exit', function jobOnExit(code, signal) {
     job.lastExit = code || signal || 0;
     job.current  = null;
@@ -102,25 +127,6 @@ function next() {
     if (hasNext) next.call(job);
     else         job.emitter.emit('end');
   });
-
-  var std, path, stdin, stdout, stderr;
-
-  std = task.stdio;
-
-  if (std && (stdin = std[0]) && (path = stdin.path)) {
-    var readStr = job.require.read(path);
-    readStr.pipe(job.current.stdin);
-  }
-
-  if (std && (stdout = std[1]) && (path = stdout.path)) {
-    var writeStr = job.require.write(path);
-    job.current.stdout.pipe(writeStr);
-  }
-
-  if (std && (stderr = std[2]) && (path = stderr.path)) {
-    var writeStr = job.require.write(path);
-    job.current.stderr.pipe(writeStr);
-  }
 
   job.emitter.emit('task', job.current);
 }
