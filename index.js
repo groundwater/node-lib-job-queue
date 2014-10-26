@@ -11,6 +11,7 @@ function Job(require) {
   this.pending = [];
   this.current = null;
   this.results = [];
+  this.aborted = false;
 
   this.running = true;
 
@@ -25,6 +26,8 @@ function Job(require) {
 */
 
 Job.prototype.queue = function jobQueue(task) {
+  if (this.aborted) throw new Error('Cannot Queue After Abort')
+
   var taskType = this.require.JobTypes.task;
   this.pending.push(taskType.marshal(task));
 
@@ -39,6 +42,7 @@ Job.prototype.abort = function jobAbort(signal) {
   var method  = signal || 'SIGKILL';
 
   this.running = false;
+  this.aborted = true;
   if (this.current) this.current.kill(method)
 
   this.emitter.emit('abort');

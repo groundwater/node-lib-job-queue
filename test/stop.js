@@ -3,7 +3,7 @@ var test   = require('tap').test;
 var events = require('events');
 var Job    = require('../index.js')();
 
-test(function (t) {
+test('can abort', function (t) {
   t.plan(3);
 
   var tasks = [{

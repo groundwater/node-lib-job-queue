@@ -96,7 +96,7 @@ test("calling abort after task event", function (t) {
 });
 
 test("calling abort immediately", function (t) {
-  t.plan(1);
+  t.plan(2);
 
   var tasks = [{
     exec: process.argv[0],
@@ -113,5 +113,29 @@ test("calling abort immediately", function (t) {
 
   job.abort();
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  t.throws(function(){
+    job.queue(tasks.shift());
+  }, 'cannot queue after abort')
+});
+
+test("throws if queueing to aborted queue", function (t) {
+  t.plan(1);
+
+  var task = {
+    exec: process.argv[0],
+    args: ['-v'],
+    envs: process.env,
+    cwd: process.cwd(),
+  };
+
+  var job = Job.New();
+
+  job.emitter.on('task', function (proc) {
+    job.abort()
+    t.throws(function(){
+      job.queue(task)
+    }, 'queueing to an aborted queue should throw')
+  });
+
+  job.queue(task);
 });

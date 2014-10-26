@@ -4,7 +4,7 @@ var Cat    = require('concat-stream');
 var events = require('events');
 var Job    = require('../index.js')();
 
-test(function (t) {
+test('stdio by default goes to a stream', function (t) {
   t.plan(3);
 
   var tasks = [{
