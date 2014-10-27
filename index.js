@@ -36,6 +36,8 @@ Job.prototype.add = function jobQueue(task) {
   //
   // TODO: i don't have a test around this
   process.nextTick(next.bind(this));
+
+  return this
 };
 
 Job.prototype.abort = function jobAbort(signal) {
@@ -46,6 +48,8 @@ Job.prototype.abort = function jobAbort(signal) {
   if (this.current) this.current.kill(method)
 
   this.emitter.emit('abort');
+
+  return this
 };
 
 
