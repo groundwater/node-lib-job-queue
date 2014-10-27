@@ -87,7 +87,7 @@ test("accept stdin, stdout argument", function (t) {
   var job = Job.New();
 
   job.emitter.on('exit', function () {
-    t.equal(require('fs').readFileSync(tmp).toString(), 'STDIO TEST\n');
+    t.equal(require('fs').readFileSync(tmp).toString().trim(), 'STDIO TEST');
     t.end();
   })
 
