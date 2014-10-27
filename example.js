@@ -23,4 +23,4 @@ info.on('end', function () {
   console.log('done job');
 });
 
-while( tasks.length > 0) job.queue(tasks.shift());
+while( tasks.length > 0) job.add(tasks.shift());

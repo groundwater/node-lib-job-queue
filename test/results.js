@@ -36,6 +36,6 @@ test(function (t) {
     t.equal(job.results.length, 2);
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 
 });

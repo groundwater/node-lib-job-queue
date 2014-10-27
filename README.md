@@ -19,13 +19,13 @@ var Job = require('lib-job-queue')();
 
 var job = Job.New();
 
-job.queue({
+job.add({
   exec: 'ps',
   args: ['aux'],
   envs: process.env
 });
 
-job.queue({
+job.add({
   exec: 'ps',
   args: ['-ef'],
   envs: process.env
@@ -55,13 +55,13 @@ job.emitter.on('end', function () {
 Abort a job, killing the in-process task and ending the sequence.
 
 ```javascript
-job.queue({
+job.add({
   exec: 'node',
   args: ['-e', 'setTimeout(function(){}, 100000)'],
   envs: process.env
 });
 
-job.queue({
+job.add({
   exec: 'node',
   args: ['-e', 'setTimeout(function(){}, 100000)'],
   envs: process.env

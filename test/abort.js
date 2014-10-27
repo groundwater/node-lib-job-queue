@@ -23,7 +23,7 @@ test("abort with SIGQUIT", function (t) {
     t.equal(info.signal, 'SIGQUIT');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test("abort with SIGKILL", function (t) {
@@ -46,7 +46,7 @@ test("abort with SIGKILL", function (t) {
     t.equal(info.signal, 'SIGKILL');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test("calling abort after end", function (t) {
@@ -69,7 +69,7 @@ test("calling abort after end", function (t) {
     t.ok(true, 'should emit an abort event');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test("calling abort after task event", function (t) {
@@ -92,7 +92,7 @@ test("calling abort after task event", function (t) {
     t.ok(true, 'should emit an abort event');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test("calling abort immediately", function (t) {
@@ -114,7 +114,7 @@ test("calling abort immediately", function (t) {
   job.abort();
 
   t.throws(function(){
-    job.queue(tasks.shift());
+    job.add(tasks.shift());
   }, 'cannot queue after abort')
 });
 
@@ -133,9 +133,9 @@ test("throws if queueing to aborted queue", function (t) {
   job.emitter.on('task', function (proc) {
     job.abort()
     t.throws(function(){
-      job.queue(task)
+      job.add(task)
     }, 'queueing to an aborted queue should throw')
   });
 
-  job.queue(task);
+  job.add(task);
 });

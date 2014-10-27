@@ -25,7 +25,7 @@ function Job(require) {
 
 */
 
-Job.prototype.queue = function jobQueue(task) {
+Job.prototype.add = function jobQueue(task) {
   if (this.aborted) throw new Error('Cannot Queue After Abort')
 
   var taskType = this.require.JobTypes.task;

@@ -31,7 +31,7 @@ test("exit status should propagate when non-zero", function (t) {
     proc.stdout.pipe(sum);
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test("exit status should propagate when zero", function (t) {
@@ -61,5 +61,5 @@ test("exit status should propagate when zero", function (t) {
     proc.stdout.pipe(sum);
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });

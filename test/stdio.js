@@ -23,7 +23,7 @@ test("accept stdin argument", function (t) {
     })
   });
 
-  job.queue(task);
+  job.add(task);
 });
 
 test("accept stdout argument", function (t) {
@@ -47,7 +47,7 @@ test("accept stdout argument", function (t) {
     t.end();
   })
 
-  job.queue(task);
+  job.add(task);
 });
 
 test("accept stderr argument", function (t) {
@@ -71,7 +71,7 @@ test("accept stderr argument", function (t) {
     t.end();
   })
 
-  job.queue(task);
+  job.add(task);
 });
 
 test("accept stdin, stdout argument", function (t) {
@@ -91,5 +91,5 @@ test("accept stdin, stdout argument", function (t) {
     t.end();
   })
 
-  job.queue(task);
+  job.add(task);
 });

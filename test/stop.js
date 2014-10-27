@@ -33,6 +33,6 @@ test('can abort', function (t) {
     t.ok(true, 'should exit');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 
 });

@@ -8,19 +8,19 @@ test(function (t) {
   var job = Job.New();
 
   t.throws(function () {
-    job.queue();
+    job.add();
   });
 
   t.throws(function () {
-    job.queue({});
+    job.add({});
   });
 
   t.throws(function () {
-    job.queue({exec: node});
+    job.add({exec: node});
   });
 
   t.throws(function() {
-    job.queue({exec: node, args: []})
+    job.add({exec: node, args: []})
   });
 
   t.end();

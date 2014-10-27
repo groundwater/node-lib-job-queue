@@ -41,5 +41,5 @@ test(function (t) {
     })
   });
 
-  job.queue(task);
+  job.add(task);
 });

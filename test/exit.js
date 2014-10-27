@@ -25,7 +25,7 @@ test(function (t) {
     t.equal(code.shift(), info.code);
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test(function (t) {
@@ -46,7 +46,7 @@ test(function (t) {
     t.equal(info.signal, 'SIGKILL');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test(function (t) {
@@ -67,7 +67,7 @@ test(function (t) {
     t.equal(info.signal, 'SIGKILL');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
 
 test("last exit should be null before running a job", function (t) {

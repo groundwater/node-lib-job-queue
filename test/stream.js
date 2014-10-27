@@ -29,5 +29,5 @@ test('stdio by default goes to a stream', function (t) {
     t.ok(true, 'should end');
   });
 
-  while( tasks.length > 0) job.queue(tasks.shift());
+  while( tasks.length > 0) job.add(tasks.shift());
 });
