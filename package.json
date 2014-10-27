@@ -1,6 +1,6 @@
 {
   "name": "lib-job-queue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "sequential job queue",
   "main": "index.js",
   "scripts": {
